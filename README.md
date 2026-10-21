@@ -18,6 +18,27 @@ python analysis.py
 
 Results: results are written to results.json (and figures/bugs_found.png).
 
+## Results (latest run)
+
+On my seeded fuzzing-campaign simulation, a standard type-coverage-guided queue that treats every new type state equally found 1.86 distinct bugs per test campaign (mean, three seeds) within the fixed run budget, versus 9.28 for the class-balanced LightGBM ranker.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 1.861 |
+| improved_score | 9.278 |
+| improvement | 7.417 |
+| baseline_score_std | 0.1273 |
+| improved_score_std | 0.2406 |
+| baseline_runs_to_first_bug | 805.3 |
+| improved_runs_to_first_bug | 234 |
+| baseline_states_covered | 398.6 |
+| improved_states_covered | 398.8 |
+| improved_model_test_auc | 0.961 |
+
+Run on 2026-10-21. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Simulation only; the hidden bug signal is linear in the features, which favours the tree model, so gains may be optimistic. Training labels come from baseline-style campaigns. Campaign-level split (not row-stratified) to avoid leakage. Bugs are rare, so the metric is noisy; standard deviations are across three seeds.
+
 ## Reference
 
 This project is motivated by the following paper:
