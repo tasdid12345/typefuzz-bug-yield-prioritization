@@ -1,0 +1,30 @@
+{
+  "question": "Can a class-balanced gradient-boosting model that ranks type states by predicted bug yield find more seeded bugs within a fixed run budget than a type-coverage queue that treats every new type state equally?",
+  "method": "Seeded simulation of fuzzing campaigns. Type states have feature vectors; a small fraction hide bugs with low per-run trigger probability. A class-balanced LightGBM trained on earlier campaigns scores type states; the same queue and run budget are used for both schedulers. Campaigns are split once into train and test; tuning uses 3-fold CV on training rows only.",
+  "dataset": {
+    "name": "Seeded fuzzing-campaign simulation (numpy, no download)",
+    "source_url": "https://numpy.org/",
+    "n_rows": 60000,
+    "n_train": 42000,
+    "n_test": 18000,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "distinct seeded bugs found within fixed run budget (mean per test campaign)",
+  "higher_is_better": true,
+  "baseline": "Type-coverage-guided queue: round-robin over type states in first-come order, every new type state has equal priority.",
+  "improved": "Same queue and budget, but each run goes to the queued type state with the highest class-balanced LightGBM bug-yield score (discounted by runs spent).",
+  "metrics": {
+    "baseline_score": 1.861111111111111,
+    "improved_score": 9.277777777777777,
+    "improvement": 7.416666666666666,
+    "baseline_score_std": 0.1272937693043289,
+    "improved_score_std": 0.24056261216234373,
+    "baseline_runs_to_first_bug": 805.3333333333334,
+    "improved_runs_to_first_bug": 234.0,
+    "baseline_states_covered": 398.5555555555556,
+    "improved_states_covered": 398.8055555555556,
+    "improved_model_test_auc": 0.9609952908234695
+  },
+  "notes": "Simulation only; the hidden bug signal is linear in the features, which favours the tree model, so gains may be optimistic. Training labels come from baseline-style campaigns. Campaign-level split (not row-stratified) to avoid leakage. Bugs are rare, so the metric is noisy; standard deviations are across three seeds."
+}
